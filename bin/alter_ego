@@ -1,0 +1,15 @@
+#!/usr/bin/perl -w
+#
+# The Alter Ego startup script
+#
+
+use strict;
+use warnings;
+use utf8;
+use FindBin;
+use lib "$FindBin::Bin/../lib";
+use Bot::AlterEgo;
+
+my $alter_ego = Bot::AlterEgo->new;
+
+$alter_ego->start;
