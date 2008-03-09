@@ -60,6 +60,16 @@ sub start {
   AnyEvent->condvar->wait;
 }
 
+#######
+# Hooks
+
+sub on_stream_ready {
+  my ($self) = @_;
+  
+  $self->{ready} = 1;
+}
+
+
 ############
 # Accesssors
 
