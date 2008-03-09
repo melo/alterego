@@ -53,6 +53,13 @@ sub connect {
   $con->init;
 }
 
+sub start {
+  my ($self) = @_;
+  
+  $self->connect;
+  AnyEvent->condvar->wait;
+}
+
 ############
 # Accesssors
 
