@@ -21,6 +21,13 @@ sub new {
   my $con = Net::XMPP2::IM::Connection->new(%{$cfg->{connection}});
   my $self = bless { con => $con, ready => 0 }, $class;
 
+  # Std hooks
+  $con->reg_cb(
+    stream_ready     => sub { $self->on_stream_ready(@_)       },
+    initial_presence => sub { $self->send_initial_presence(@_) },
+    message          => sub { $self->on_message(@_)            },
+  );
+  
   return $self;
 }
 
