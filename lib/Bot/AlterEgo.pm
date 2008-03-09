@@ -28,6 +28,12 @@ sub new {
     message          => sub { $self->on_message(@_)            },
   );
   
+  # Suport debug cfg option
+  $con->reg_cb(
+    debug_recv   => sub { print STDERR "IN:  $_[1]\n" },
+    debug_send   => sub { print STDERR "OUT: $_[1]\n" },
+  ) if $cfg->{debug};
+
   return $self;
 }
 
