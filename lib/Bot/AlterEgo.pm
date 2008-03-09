@@ -7,6 +7,10 @@ use Config::Any;
 use Net::XMPP2::IM::Connection;
 use Net::XMPP2::Ext::Disco;
 use Data::Dumper;
+use Module::Pluggable
+  search_path => [qw( Bot::AlterEgo::Plugins )],
+  require     => 1,
+  ;
 
 
 #############################
@@ -42,6 +46,8 @@ sub new {
   $con->add_extension ($disco);
   $disco->set_identity('client', 'bot', 'Alter Ego');
   
+  $self->init_plugins;
+  
   return $self;
 }
 
@@ -66,6 +72,17 @@ sub start {
   
   $self->connect;
   AnyEvent->condvar->wait;
+}
+
+sub init_plugins {
+  my ($self) = @_;
+  
+  my $plugins = $self->{plugins} = [];
+  foreach my $plugin ($self->plugins) {
+    push @$plugins, $plugin->new($self);
+  }
+  
+  return;
 }
 
 #######
