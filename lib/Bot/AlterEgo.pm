@@ -5,6 +5,8 @@ use warnings;
 use utf8;
 use Config::Any;
 use Net::XMPP2::IM::Connection;
+use Data::Dumper;
+
 
 #############################
 # Constructor and bot startup
@@ -80,6 +82,13 @@ sub send_initial_presence {
     priority => -1,
   );
   print STDERR "INITIAL presence sent\n";
+}
+
+
+sub on_message {
+  my ($self, $message) = @_;
+  
+  print STDERR "INCOMING MESSAGE", Dumper($message);
 }
 
 
