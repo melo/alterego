@@ -18,8 +18,18 @@ sub new {
   $cfg->{connection}{resource} ||= 'AlterEgo';
   $cfg->{connection}{initial_presence} = undef; # Disable automatic initial presence
 
-  # ...
+  my $con = Net::XMPP2::IM::Connection->new(%{$cfg->{connection}});
+  my $self = bless { con => $con, ready => 0 }, $class;
+
+  return $self;
 }
+
+
+############
+# Accesssors
+
+sub con      { return $_[0]{con}   }
+sub is_ready { return $_[0]{ready} }
 
 
 #######
