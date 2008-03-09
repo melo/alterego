@@ -37,6 +37,21 @@ sub new {
   return $self;
 }
 
+sub connect {
+  my ($self) = @_;
+  
+  return if $self->is_ready;
+  
+  # Connect and init
+  my $con = $self->con;
+  my $connected;
+  do {
+    $connected = $con->connect;
+  } while (!$connected && $con->may_try_connect);
+  die "Could not connect to server: $!, " if !$connected;
+  
+  $con->init;
+}
 
 ############
 # Accesssors
