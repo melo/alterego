@@ -5,6 +5,7 @@ use warnings;
 use utf8;
 use Config::Any;
 use Net::XMPP2::IM::Connection;
+use Net::XMPP2::Ext::Disco;
 use Data::Dumper;
 
 
@@ -35,7 +36,12 @@ sub new {
     debug_recv   => sub { print STDERR "IN:  $_[1]\n" },
     debug_send   => sub { print STDERR "OUT: $_[1]\n" },
   ) if $cfg->{debug};
-
+  
+  # Support XEP-0030: Disco
+  my $disco = $self->{disco} = Net::XMPP2::Ext::Disco->new;
+  $con->add_extension ($disco);
+  $disco->set_identity('client', 'bot', 'Alter Ego');
+  
   return $self;
 }
 
