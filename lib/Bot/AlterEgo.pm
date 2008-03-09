@@ -67,6 +67,19 @@ sub on_stream_ready {
   my ($self) = @_;
   
   $self->{ready} = 1;
+  $self->con->event('initial_presence');
+}
+
+
+sub send_initial_presence {
+  my ($self) = @_;
+  
+  my $con = $self->con;
+  $con->send_presence(undef, undef,
+    status   => 'AlterEgo bot is here!',
+    priority => -1,
+  );
+  print STDERR "INITIAL presence sent\n";
 }
 
 
