@@ -1,0 +1,9 @@
+{
+  "connection": {
+    "username": "LOCAL",
+    "domain":   "DOMAIN",
+    "password": "PASSWORD"
+  },
+
+  "debug": "1"
+}
