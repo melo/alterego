@@ -30,9 +30,9 @@ sub new {
 
   # Std hooks
   $con->reg_cb(
-    stream_ready     => sub { $self->on_stream_ready(@_)       },
-    initial_presence => sub { $self->send_initial_presence(@_) },
-    message          => sub { $self->on_message(@_)            },
+    session_ready => sub { shift; $self->_on_online(@_)  },
+    disconnect    => sub { shift; $self->_on_offline(@_) },
+    message       => sub { shift; $self->_on_message(@_) },
   );
   
   # Suport debug cfg option
@@ -46,6 +46,7 @@ sub new {
   $con->add_extension ($disco);
   $disco->set_identity('client', 'bot', 'Alter Ego');
   
+  # Load all of our plugins
   $self->init_plugins;
   
   return $self;
@@ -85,18 +86,27 @@ sub init_plugins {
   return;
 }
 
-#######
-# Hooks
+###############
+# Our own Hooks
 
-sub on_stream_ready {
+sub _on_online {
   my ($self) = @_;
   
   $self->{ready} = 1;
-  $self->con->event('initial_presence');
+  print STDERR "ONLINE! :)\n";
+  $self->notify('on_online');
+  $self->_initial_presence;
 }
 
+sub _on_offline {
+  my ($self) = @_;
+  
+  $self->{ready} = 0;
+  print STDERR "OFFLINE! :(\n";
+  $self->notify('on_offline');
+}
 
-sub send_initial_presence {
+sub _initial_presence {
   my ($self) = @_;
   
   my $con = $self->con;
@@ -105,13 +115,53 @@ sub send_initial_presence {
     priority => -1,
   );
   print STDERR "INITIAL presence sent\n";
+
+  $self->notify('on_presence_set');
+}
+
+sub _on_message {
+  my ($self, $message) = @_;
+  
+  my $handled = 0;
+  $self->notify('on_message', $message, \$handled);
+  
+  print STDERR "Unhandled message received\n" unless $handled;
 }
 
 
-sub on_message {
-  my ($self, $message) = @_;
+########################
+# API for plugins to use
+
+sub hooks {
+  my ($self, $hook) = @_;
   
-  print STDERR "INCOMING MESSAGE", Dumper($message);
+  croak("FATAL: requires 'hook' parameter, ") unless defined $hook;
+  
+  return $self->{hooks}{$hook} ||= [];
+}
+
+sub add_listener {
+  my ($self, $hook, $cb) = @_;
+  
+  my $hooks = $self->hooks($hook);
+  push @$hooks, $cb;
+  
+  return;
+}
+
+sub notify {
+  my ($self, $hook, @params) = @_;
+
+  my $listeners = $self->hooks($hook);
+  foreach my $listener (@$listeners) {
+    eval { $listener->(@params) };
+    if (my $e = $@) {
+      print STDERR "Listener of '$hook' dieed: $e";
+      die $e;
+    }
+  }
+  
+  return;
 }
 
 
