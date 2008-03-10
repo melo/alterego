@@ -1,7 +1,10 @@
+/* See http://www.xmpp.org/extensions/xep-0080.html#table-1 for all the possible attributes */
 {
   "01:91:d1:72:b1:d1": {
-    "desc": "EVOLUI.COM Office",
-    "city": "Figueira da Foz",
-    "country": "Portugal"
+    "description": "EVOLUI.COM Office",
+    "locality": "Figueira da Foz",
+    "country": "Portugal",
+    "lat": 40.14351,
+    "long": -8.846424 
   }
 }
