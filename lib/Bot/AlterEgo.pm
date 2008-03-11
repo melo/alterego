@@ -7,6 +7,7 @@ use Config::Any;
 use Net::XMPP2::IM::Connection;
 use Net::XMPP2::Ext::Disco;
 use Data::Dumper;
+use Scope::Guard;
 use Module::Pluggable
   search_path => [qw( Bot::AlterEgo::Plugins )],
   require     => 1,
@@ -162,6 +163,30 @@ sub notify {
   }
   
   return;
+}
+
+
+########################
+# Timer and interval API
+
+my @timers;
+sub each_interval {
+  my ($self, $interval, $cb) = @_;
+  
+  my $id = scalar(@timers);
+  $timers[$id] = _start_timer($id, $interval, $cb);
+  
+  return Scope::Guard->new(sub {
+    $timers[$id] = undef;
+  });
+}
+
+sub _start_timer {
+  my ($id, $interval, $cb) = @_;
+  $timers[$id] = AnyEvent->timer( after => $interval, cb => sub {
+    $cb->();
+    $timers[$id] = &_start_timer($id, $interval, $cb) if defined $timers[$id];
+  });
 }
 
 
