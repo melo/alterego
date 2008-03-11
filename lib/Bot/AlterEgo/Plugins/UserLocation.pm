@@ -84,7 +84,7 @@ sub is_new_location {
   }
   
   FIELD:
-  foreach my $field (qw( description datum )) {
+  foreach my $field (qw( description lat long )) {
     # Catch "one exists, other doesn't"
     if (exists $current_location->{$field} ^ exists $new->{$field}) {
       $equal = 0;
