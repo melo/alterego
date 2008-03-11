@@ -13,7 +13,7 @@ sub init {
   my $bot = $self->bot;
   
   $bot->add_listener('on_online', sub { $self->check_location });
-#  $bot->each_interval(60, sub { $self->check_location });
+  $self->{timer} = $bot->each_interval(60, sub { $self->check_location });
 }
 
 sub check_location {
