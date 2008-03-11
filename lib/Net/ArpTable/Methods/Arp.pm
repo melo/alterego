@@ -31,7 +31,7 @@ sub arp_table {
       
       # normalize mac address
       $mac = lc($mac);
-      $mac =~ s/\b0\b/00/g;
+      $mac =~ s/\b([0-9a-z])\b/0$1/g;
       
       $arp_table{ip2mac}{$ip}  = $mac;
       $arp_table{mac2ip}{$mac} = $ip;
