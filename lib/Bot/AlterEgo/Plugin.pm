@@ -2,7 +2,7 @@ package Bot::AlterEgo::Plugin;
 
 use strict;
 use warnings;
-use utf8;
+use base qw( Class::C3::Componentised );
 
 sub new {
   my ($class, $bot) = @_;
@@ -16,5 +16,7 @@ sub new {
 sub init {}
 
 sub bot { return $_[0]{_bot} }
+
+sub component_base_class { "Bot::AlterEgo::AddOns" }
 
 1;
