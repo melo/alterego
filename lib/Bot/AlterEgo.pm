@@ -184,8 +184,8 @@ sub each_interval {
 sub _start_timer {
   my ($id, $interval, $cb) = @_;
   $timers[$id] = AnyEvent->timer( after => $interval, cb => sub {
-    $cb->();
     $timers[$id] = &_start_timer($id, $interval, $cb) if defined $timers[$id];
+    $cb->();
   });
 }
 
