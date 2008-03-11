@@ -8,6 +8,8 @@ Alter Ego is a XMPP agent, a bot that runs using your own JID, but with a negati
 
 It allows you to deploy XMPP-based services that can be controlled using your roster and your buddies presence status.
 
+Alter Ego is licensed under the Artistic License.
+
 
 How to run
 ----------
