@@ -168,6 +168,16 @@ sub notify {
 }
 
 
+###########
+# DISCO API
+
+sub add_feature {
+  my ($self, $feature) = @_;
+  
+  $self->{disco}->enable_feature($feature);
+}
+
+
 ########################
 # Timer and interval API
 
