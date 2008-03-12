@@ -62,9 +62,11 @@ sub connect {
   my $con = $self->con;
   my $connected;
   do {
+    print STDERR "Connecting...\n";
     $connected = $con->connect;
   } while (!$connected && $con->may_try_connect);
   die "Could not connect to server: $!, " if !$connected;
+  print STDERR "Connected!\n";
   
   $con->init;
 }
