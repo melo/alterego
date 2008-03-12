@@ -10,6 +10,9 @@ use FindBin;
 use lib "$FindBin::Bin/../lib";
 use Bot::AlterEgo;
 
+binmode \*STDERR, ':utf8';
+binmode \*STDOUT, ':utf8';
+
 my $alter_ego = Bot::AlterEgo->new;
 
 $alter_ego->start;
