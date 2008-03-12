@@ -44,7 +44,7 @@ sub new {
   
   # Support XEP-0030: Disco
   my $disco = $self->{disco} = Net::XMPP2::Ext::Disco->new;
-  $con->add_extension ($disco);
+  $con->add_extension($disco);
   $disco->set_identity('client', 'bot', 'Alter Ego');
   
   # Load all of our plugins
