@@ -18,6 +18,9 @@ sub init {
   
   $bot->add_listener('on_online', sub { $self->check_location });
   $self->{timer} = $bot->each_interval(60, sub { $self->check_location });
+  
+  $bot->add_feature('http://jabber.org/protocol/geoloc');
+  $bot->add_feature('http://jabber.org/protocol/geoloc+notify');
 }
 
 sub check_location {
