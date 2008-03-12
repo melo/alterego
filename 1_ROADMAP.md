@@ -8,6 +8,7 @@ These are some of the things that don't work yet, but will, eventually.
 
  * Reconnect: this is the next high-priority item and should be ready
    very soon;
+ * Support XEP-0115: capabilities are huge;
  * User Avatar: support XEP-0084 - basically it will listen to vCard
    changes (using XEP-0153) and update your avatar nodes;
  * File Transfer: support at least XEP-0065, but I would also like to
