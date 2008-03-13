@@ -29,18 +29,28 @@ sub check_location {
   # Not connected, forget about it
   return unless $self->bot->is_ready;
   
+  # Too fast
+  my $now = time();
+  return if $now - ($self->{last_check_location} || 0) < 55;
+  $self->{last_check_location} = $now;
+  
   my $gateway = Net::DefaultGateway->find;
   return unless $gateway;
-  print "UserLocation: found gateway $gateway\n";
-  $| = 1;
+  print STDERR "UserLocation: found gateway $gateway\n";
+
   my $mac_addr = Net::ArpTable->mac_for_ip($gateway);
   return unless $mac_addr;
-  print "UserLocation: found mac $mac_addr for gateway $gateway\n";
+  print STDERR "UserLocation: found mac $mac_addr for gateway $gateway\n";
   
   my $location_dbs = Config::Any->load_stems({
     stems   => [ ".location_db", "$ENV{HOME}/.location_db" ],
     use_ext => 1,
   });
+  
+  if (! @$location_dbs) {
+    print STDERR "No location files found\n";
+    return;
+  }
   
   foreach my $db_spec (@$location_dbs) {
     my ($file, $db) = %$db_spec;
