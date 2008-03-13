@@ -80,8 +80,10 @@ sub check_location {
           attrs  => [ 'xml:lang' => 'en' ],
           childs => \@geo,
         },
-        ok_cb => sub { print STDERR "GeoLocation was set to $data->{description}!\n" }
+        ok_cb    => sub { print STDERR "User location set to $data->{description}.\n" },
+        error_cb => sub { print STDERR "Failed update of user location to $data->{description}!\n" },
       });
+      
     }
   }
 }
